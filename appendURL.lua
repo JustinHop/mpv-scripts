@@ -10,7 +10,7 @@
     -- purpose with or without fee is hereby granted, provided that the above
     -- copyright notice and this permission notice appear in all copies.
 
-local platform = nil --set to 'linux', 'windows' or 'macos' to override automatic assign
+local platform = linux --set to 'linux', 'windows' or 'macos' to override automatic assign
 
 if not platform then
   local o = {}
@@ -36,6 +36,14 @@ function append(primaryselect)
   end
 end
 
+function replace(primaryselect)
+  local clipboard = get_clipboard(primaryselect or false)
+  if clipboard then
+    mp.commandv("loadfile", clipboard, "replace")
+    mp.osd_message("URL playing: "..clipboard)
+    msg.info("URL playing: "..clipboard)
+  end
+end
 --handles the subprocess response table and return clipboard if it was a success
 function handleres(res, args, primary)
   if not res.error and res.status == 0 then
@@ -89,3 +97,5 @@ function get_clipboard(primary)
 end
 
 mp.add_key_binding("a", "appendURL", append)
+
+-- mp.add_key_binding("A", "replaceURL", replace)
